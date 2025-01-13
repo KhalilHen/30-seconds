@@ -1,8 +1,19 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:thirty_seconds/homepage.dart';
+import 'package:thirty_seconds/pages/homepage.dart';
 
 void main() {
-  final game = StartGame();
-  runApp(GameWidget(game: game));
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: '30 Seconds',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
 }
