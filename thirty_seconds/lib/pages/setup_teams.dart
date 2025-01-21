@@ -10,13 +10,14 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
   final Map<String, List<String>> players = {};
 
   final TextEditingController teamController = TextEditingController();
-  final TextEditingController playerController = TextEditingController();
+  final Map<String, TextEditingController> playerController = {};
 
   void addPlayer(String team) {
-    if (playerController.text.isNotEmpty) {
+    final controller = playerController[team];
+    if (controller != null && controller.text.isNotEmpty) {
       setState(() {
-        players[team]?.add(playerController.text);
-        playerController.clear();
+        players[team]?.add(controller.text.trim());
+        controller.clear();
       });
     }
   }
@@ -24,18 +25,35 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
   void addTeam() {
     if (teamController.text.isNotEmpty) {
       setState(() {
-        teams.add(teamController.text);
-        players[teamController.text] = [];
+        final teamName = teamController.text.trim();
+        if (!teams.contains(teamName)) teams.add(teamName);
+        players[teamName] = [];
+        playerController[teamName] = TextEditingController();
         teamController.clear();
       });
     }
+  }
+
+  bool canStartGame() {
+    if (teams.length < 2) return false;
+    for (var team in teams) {
+      if ((players[team]?.length ?? 0) < 2) return false;
+    }
+    return true;
+  }
+
+  @override
+  void dispose() {
+    teamController.dispose();
+    playerController.values.forEach((controller) => controller.dispose());
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Setup Teams and Players'),
+        title: Text('Pick Your Teams'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -44,55 +62,80 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
             TextFormField(
               controller: teamController,
               decoration: InputDecoration(
-                labelText: 'Team Name',
-                hintText: 'Team 1',
+                labelText: 'Enter Team Name',
                 suffixIcon: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: addTeam,
                 ),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a team name';
+                }
+              },
             ),
+            const SizedBox(height: 16.0),
             Expanded(
-              child: ListView.builder(
-                itemCount: teams.length,
-                itemBuilder: (context, index) {
-                  final team = teams[index];
-                  return ExpansionTile(
-                    title: Text(team),
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: players[team]?.length ?? 0,
-                        itemBuilder: (context, playerIndex) {
-                          return ListTile(
-                            title: Text(players[team]![playerIndex]),
-                          );
-                        },
+              child: teams.isEmpty
+                  ? Center(
+                      child: Text(
+                        'No teams added yet. Start by adding a team!',
+                        style: TextStyle(fontSize: 16.0, color: Colors.grey),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: playerController,
-                                decoration: InputDecoration(
-                                  labelText: 'Player Name',
-                                  hintText: 'Player 1',
-                                ),
+                    )
+                  : ListView.builder(
+                      itemCount: teams.length,
+                      itemBuilder: (context, index) {
+                        final team = teams[index];
+                        return Card(
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: ExpansionTile(
+                            title: Text(
+                              team,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
                               ),
                             ),
-                            IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () => addPlayer(team),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                            children: [
+                              if (players[team]?.isNotEmpty ?? false)
+                                ...players[team]!.map(
+                                  (player) => ListTile(
+                                    title: Text(player),
+                                  ),
+                                ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                          controller: playerController[team],
+                                          decoration: InputDecoration(
+                                            labelText: 'Enter Player Name',
+                                          ),
+                                          validator: (value) {
+                                            if (value == null || value.isEmpty) {
+                                              return "please enter a player name";
+                                            }
+                                          }),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.add),
+                                      onPressed: () => addPlayer(team),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+            ),
+            ElevatedButton(
+              onPressed: null,
+              child: Text("Start Game"),
             ),
           ],
         ),
