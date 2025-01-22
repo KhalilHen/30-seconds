@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thirty_seconds/pages/start_game_overview_screen.dart';
 
 class SetupTeamsPage extends StatefulWidget {
   @override
@@ -134,8 +135,20 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
                     ),
             ),
             ElevatedButton(
-              onPressed: null,
-              child: Text("Start Game"),
+              onPressed: canStartGame()
+                  ? () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => StartGamePage(
+                            teams: teams,
+                            players: players,
+                          ),
+                        ),
+                      );
+                    }
+                  : null,
+              child: Text(canStartGame() ? "Submit your teams" : "Cannot Start Game yet"),
             ),
           ],
         ),
