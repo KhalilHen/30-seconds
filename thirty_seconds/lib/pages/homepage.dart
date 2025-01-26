@@ -26,16 +26,19 @@ class _HomePageState extends State<HomePage> {
             //   height: 200,
             //   width: 200,
             // ),
-            Image.asset(
-              // '/assets/logo.png',
-              // '/logo.png',
-              // 'logo.png', //This doesn't work
-              // 'assets/index.png',
-              'index.png', //* This works
-              height: 200,
-              width: 200,
+            ClipOval(
+              child: Image.asset(
+                // '/assets/logo.png',
+                // '/logo.png',
+                // 'logo.png', //This doesn't work
+                // 'assets/index.png',
+                // 'index.png', //* This works
+                'timer.jpg',
+                height: 200,
+                width: 200,
+                fit: BoxFit.cover,
+              ),
             ),
-            //* Doesn't work
             SizedBox(height: 40),
             Text(
               "Thirty Seconds",
