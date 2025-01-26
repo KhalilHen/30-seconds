@@ -13,7 +13,7 @@ class GameScreen extends StatefulWidget {
   _GameScreenState createState() => _GameScreenState();
 }
 
-class _GameScreenState extends State<GameScreen> {
+class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateMixin {
   late List<String> words;
   late Map<String, int> teamScores;
 
@@ -25,7 +25,8 @@ class _GameScreenState extends State<GameScreen> {
   Timer? countdownTimer;
   final AudioPlayer audioPlayer = AudioPlayer(); //* Not used
 
-  double shakeOffSet = 0.0;
+  late AnimationController shakeController;
+  late Animation<double> shakeAnimation;
 
   @override
   void initState() {
@@ -33,6 +34,13 @@ class _GameScreenState extends State<GameScreen> {
     teamScores = {for (var team in widget.teams) team: 0};
     words = generateRandomWords();
     startCountdown();
+
+    shakeController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+
+    shakeAnimation = Tween<double>(begin: 0, end: 10).chain(CurveTween(curve: Curves.elasticIn)).animate(shakeController);
   }
 
   List<String> generateRandomWords() {
@@ -97,26 +105,16 @@ class _GameScreenState extends State<GameScreen> {
       if (this.timer > 1) {
         setState(() {
           this.timer--;
+          if (this.timer == 3) {
+            shakeController.forward(from: 0);
+          }
         });
       } else {
         timer.cancel();
-        // playSoundAndShake();
         showScoreDialog();
       }
     });
   }
-
-  // void playSoundAndShake() {
-  //   audioPlayer.play('assets/count-down.mp3' as Source, volume: 1.0);
-  //   setState(() {
-  //     shakeOffSet = 10;
-  //   });
-  //   Future.delayed(Duration(milliseconds: 200), () {
-  //     setState(() {
-  //       shakeOffSet = 0;
-  //     });
-  //   });
-  // }
 
   Future<void> showScoreDialog() async {
     final currentTeam = widget.teams[currentTeamIndex];
@@ -193,6 +191,7 @@ class _GameScreenState extends State<GameScreen> {
   void dispose() {
     countdownTimer?.cancel();
     audioPlayer.dispose();
+    shakeController.dispose();
     super.dispose();
   }
 
@@ -211,106 +210,115 @@ class _GameScreenState extends State<GameScreen> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.deepPurple.withOpacity(0.2),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
-                    )
-                  ],
-                ),
-                padding: const EdgeInsets.all(15),
-                child: Column(
-                  children: [
-                    Text(
-                      "Scoreboard",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.deepPurple[800],
+          child: AnimatedBuilder(
+            animation: shakeAnimation,
+            builder: (context, child) {
+              return Transform.translate(
+                offset: Offset(shakeAnimation.value, 0),
+                child: child,
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.deepPurple.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      )
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(15),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Scoreboard",
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple[800],
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    ...widget.teams.map((team) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              " Team: ${team}",
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.deepPurple[600],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.deepPurple[100],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                "Score::${teamScores[team]}",
+                      const SizedBox(height: 8),
+                      ...widget.teams.map((team) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                " Team: ${team}",
                                 style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.deepPurple[800],
+                                  fontSize: 18,
+                                  color: Colors.deepPurple[600],
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                  ],
-                ),
-              ),
-              Padding(padding: const EdgeInsets.symmetric(vertical: 16.0)),
-              isGameStarted
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Team: $currentTeam',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Text(
-                          'Player: $currentPlayer',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                        const SizedBox(height: 16.0),
-                        AnimatedDefaultTextStyle(
-                          style: TextStyle(
-                            fontSize: 32.0,
-                            color: timer <= 5 ? Colors.red : Colors.black,
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.deepPurple[100],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  "Score::${teamScores[team]}",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.deepPurple[800],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                          duration: const Duration(milliseconds: 500),
-                          child: Text('Time Left: $timer'),
-                        ),
-                        const SizedBox(height: 16.0),
-                        Text(
-                          'Words: $currentWordSet',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(fontSize: 20.0),
-                        ),
-                      ],
-                    )
-                  : Text(
-                      'Get Ready $currentPlayer Starting in $timer...',
-                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                    ),
-            ],
+                        );
+                      }).toList(),
+                    ],
+                  ),
+                ),
+                Padding(padding: const EdgeInsets.symmetric(vertical: 16.0)),
+                isGameStarted
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Team: $currentTeam',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Text(
+                            'Player: $currentPlayer',
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                          const SizedBox(height: 16.0),
+                          AnimatedDefaultTextStyle(
+                            style: TextStyle(
+                              fontSize: 32.0,
+                              color: timer <= 5 ? Colors.red : Colors.black,
+                            ),
+                            duration: const Duration(milliseconds: 500),
+                            child: Text('Time Left: $timer'),
+                          ),
+                          const SizedBox(height: 16.0),
+                          Text(
+                            'Words: $currentWordSet',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20.0),
+                          ),
+                        ],
+                      )
+                    : Text(
+                        'Get Ready $currentPlayer Starting in $timer...',
+                        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                      ),
+              ],
+            ),
           ),
         ),
       ),
