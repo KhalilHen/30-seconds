@@ -24,6 +24,15 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
   }
 
   void addTeam() {
+    final teamName = teamController.text.trim();
+
+    if (teams.contains(teamName)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Team already exists"),
+        backgroundColor: Colors.red[400],
+        duration: const Duration(seconds: 2),
+      ));
+    }
     if (teamController.text.isNotEmpty) {
       setState(() {
         final teamName = teamController.text.trim();
@@ -168,8 +177,9 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
                         },
                       ),
               ),
-              const SizedBox(height: 16,),
-
+              const SizedBox(
+                height: 16,
+              ),
               ElevatedButton(
                 onPressed: canStartGame()
                     ? () {
@@ -184,24 +194,21 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
                         );
                       }
                     : null,
-
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple[600],
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-
-                      ),
-                      disabledBackgroundColor: Colors.grey[400],
-                    ),
-                child: Text(canStartGame() ? "Submit your teams" : "Cannot Start Game yet",
-                
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight:  FontWeight.bold,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple[600],
+                  padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  disabledBackgroundColor: Colors.grey[400],
                 ),
+                child: Text(
+                  canStartGame() ? "Submit your teams" : "Cannot Start Game yet",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
