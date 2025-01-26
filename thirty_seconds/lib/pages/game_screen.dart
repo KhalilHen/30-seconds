@@ -214,40 +214,49 @@ class _GameScreenState extends State<GameScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  Text(
-                    "Scoreboard",
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepPurple[800]),
-                  ),
-                ],
+              Container(
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [
+                  BoxShadow(
+                    color: Colors.deepPurple.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  )
+                ]),
+                child: Column(
+                  children: [
+                    Text(
+                      "Scoreboard",
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepPurple[800]),
+                    ),
+                    const SizedBox(height: 8),
+                    ...widget.teams.map((team) {
+                      return Padding(
+                        padding: const EdgeInsets.all(50),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              team,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.deepPurple[600],
+                              ),
+                            ),
+                            Text(
+                              "${teamScores[team]}",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.deepPurple[800],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
               ),
-              const SizedBox(height: 8),
-              ...widget.teams.map((team) {
-                return Padding(
-                  padding: const EdgeInsets.all(50),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        team,
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.deepPurple[600],
-                        ),
-                      ),
-                      Text(
-                        "${teamScores[team]}",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple[800],
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }).toList(),
               isGameStarted
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
