@@ -9,7 +9,7 @@ class SetupTeamsPage extends StatefulWidget {
 class _SetupTeamsPageState extends State<SetupTeamsPage> {
   final List<String> teams = [];
   final Map<String, List<String>> players = {};
-
+  final formKey = GlobalKey<FormState>();
   final TextEditingController teamController = TextEditingController();
   final Map<String, TextEditingController> playerController = {};
 
@@ -54,103 +54,138 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick Your Teams'),
+        title: Text(
+          'Pick Your Teams',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: Colors.deepPurple[600],
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextFormField(
-              controller: teamController,
-              decoration: InputDecoration(
-                labelText: 'Enter Team Name',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: addTeam,
+      body: Form(
+        key: formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextFormField(
+                controller: teamController,
+                decoration: InputDecoration(
+                  labelText: 'Enter Team Name',
+                  labelStyle: TextStyle(color: Colors.deepPurple[700]),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                      borderSide: BorderSide(
+                        color: Colors.deepPurple[200]!,
+                      )),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: addTeam,
+                  ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a team name';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter a team name';
-                }
-              },
-            ),
-            const SizedBox(height: 16.0),
-            Expanded(
-              child: teams.isEmpty
-                  ? Center(
-                      child: Text(
-                        'No teams added yet. Start by adding a team!',
-                        style: TextStyle(fontSize: 16.0, color: Colors.grey),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: teams.length,
-                      itemBuilder: (context, index) {
-                        final team = teams[index];
-                        return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: ExpansionTile(
-                            title: Text(
-                              team,
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16.0,
-                              ),
+              const SizedBox(height: 16.0),
+              Expanded(
+                child: teams.isEmpty
+                    ? Center(
+                        child: Text(
+                          'No teams added yet. Start by adding a team!',
+                          style: TextStyle(fontSize: 16.0, color: Colors.deepPurple[300], fontStyle: FontStyle.italic),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: teams.length,
+                        itemBuilder: (context, index) {
+                          final team = teams[index];
+                          return Card(
+                            elevation: 4,
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            children: [
-                              if (players[team]?.isNotEmpty ?? false)
-                                ...players[team]!.map(
-                                  (player) => ListTile(
-                                    title: Text(player),
+                            child: ExpansionTile(
+                              title: Text(
+                                team,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.0,
+                                  color: Colors.deepPurple[800],
+                                ),
+                              ),
+                              children: [
+                                if (players[team]?.isNotEmpty ?? false)
+                                  ...players[team]!.map(
+                                    (player) => ListTile(
+                                      title: Text(
+                                        player,
+                                        style: TextStyle(color: Colors.deepPurple[600]),
+                                      ),
+                                      trailing: IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            players[team]?.remove(player);
+                                          });
+                                        },
+                                        icon: Icon(Icons.delete, color: Colors.red[400]),
+                                      ),
+                                    ),
+                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextFormField(
+                                            controller: playerController[team],
+                                            decoration: InputDecoration(
+                                              labelText: 'Enter Player Name',
+                                              labelStyle: TextStyle(color: Colors.deepPurple[700]),
+                                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide(color: Colors.deepPurple[200]!)),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null || value.isEmpty) {
+                                                return "please enter a player name";
+                                              }
+                                            }),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.add),
+                                        onPressed: () => addPlayer(team),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextFormField(
-                                          controller: playerController[team],
-                                          decoration: InputDecoration(
-                                            labelText: 'Enter Player Name',
-                                          ),
-                                          validator: (value) {
-                                            if (value == null || value.isEmpty) {
-                                              return "please enter a player name";
-                                            }
-                                          }),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.add),
-                                      onPressed: () => addPlayer(team),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+              ),
+              ElevatedButton(
+                onPressed: canStartGame()
+                    ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => StartGamePage(
+                              teams: teams,
+                              players: players,
+                            ),
                           ),
                         );
-                      },
-                    ),
-            ),
-            ElevatedButton(
-              onPressed: canStartGame()
-                  ? () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => StartGamePage(
-                            teams: teams,
-                            players: players,
-                          ),
-                        ),
-                      );
-                    }
-                  : null,
-              child: Text(canStartGame() ? "Submit your teams" : "Cannot Start Game yet"),
-            ),
-          ],
+                      }
+                    : null,
+                child: Text(canStartGame() ? "Submit your teams" : "Cannot Start Game yet"),
+              ),
+            ],
+          ),
         ),
       ),
     );
