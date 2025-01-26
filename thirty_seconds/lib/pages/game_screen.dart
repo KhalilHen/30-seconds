@@ -194,7 +194,7 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: Center(
         child: AnimatedBuilder(
-          animation: Listenable.merge([]), 
+          animation: Listenable.merge([]),
           builder: (context, child) {
             return Transform.translate(
               offset: Offset(shakeOffSet, 0),
