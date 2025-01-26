@@ -27,7 +27,11 @@ class _HomePageState extends State<HomePage> {
             //   width: 200,
             // ),
             Image.asset(
-              'assets/logo.png',
+              // '/assets/logo.png',
+              // '/logo.png',
+              // 'logo.png', //This doesn't work
+              // 'assets/index.png',
+              'index.png', //* This works
               height: 200,
               width: 200,
             ),
@@ -54,7 +58,18 @@ class _HomePageState extends State<HomePage> {
                   MaterialPageRoute(builder: (context) => SetupTeamsPage()),
                 );
               },
-              child: Text('Start Game'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple[600],
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                elevation: 5,
+              ),
+              child: Text(
+                'Start Game',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
             ),
           ],
         ),

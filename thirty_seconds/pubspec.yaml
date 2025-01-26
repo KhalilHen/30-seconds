@@ -55,7 +55,7 @@ dev_dependencies:
 flutter:
   assets:
     - count-down.mp3
-    - assets/logo.png
+    # - assets/logo.png
     - assets/
 
   # The following line ensures that the Material Icons font is
