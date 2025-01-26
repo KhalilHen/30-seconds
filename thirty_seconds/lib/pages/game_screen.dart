@@ -28,12 +28,12 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   late AnimationController shakeController;
   late Animation<double> shakeAnimation;
   bool shouldShake = false;
+  bool isSoundPlaying = false;
   @override
   void initState() {
     super.initState();
     teamScores = {for (var team in widget.teams) team: 0};
     words = generateRandomWords();
-    startCountdown();
 
     audioPlayer.setSource(AssetSource('count-down.mp3 '));
 
@@ -43,10 +43,19 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     );
 
     shakeAnimation = Tween<double>(begin: 0, end: 10).chain(CurveTween(curve: Curves.elasticIn)).animate(shakeController);
+    startCountdown();
   }
 
   Future<void> playTimerEndSound() async {
-    await audioPlayer.play(AssetSource('count-down.mp3'));
+    if (!isSoundPlaying) {
+      isSoundPlaying = true;
+      await audioPlayer.play(AssetSource('count-down.mp3'));
+    }
+  }
+
+  Future<void> stopTimerEndSound() async {
+    await audioPlayer.stop();
+    isSoundPlaying = false;
   }
 
   List<String> generateRandomWords() {
@@ -111,6 +120,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       words = generateRandomWords();
       currentWordSet = words.join(', ');
       shouldShake = false;
+      isSoundPlaying = false;
     });
 
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -120,12 +130,15 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
           if (this.timer <= 3 && this.timer > 0) {
             shouldShake = true;
             shakeController.forward(from: 0);
+          }
+          if (this.timer <= 5 && this.timer > 0) {
+            playTimerEndSound();
           } else {
             shouldShake = false;
           }
         });
       } else {
-        playTimerEndSound();
+        stopTimerEndSound();
         shakeController.forward(from: 0);
         timer.cancel();
         showScoreDialog();
@@ -209,7 +222,6 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     countdownTimer?.cancel();
     audioPlayer.dispose();
 
-    audioPlayer.dispose();
     shakeController.dispose();
     super.dispose();
   }
