@@ -209,31 +209,45 @@ class _GameScreenState extends State<GameScreen> {
         elevation: 0,
       ),
       body: Center(
-        child: AnimatedBuilder(
-          animation: Listenable.merge([]),
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(shakeOffSet, 0),
-              child: child,
-            );
-          },
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'Score',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Column(
+                children: [
+                  Text(
+                    "Scoreboard",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepPurple[800]),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
-              Column(
-                children: widget.teams.map((team) {
-                  return Text(
-                    '$team: ${teamScores[team]}',
-                    style: TextStyle(fontSize: 20),
-                  );
-                }).toList(),
-              ),
-              const SizedBox(height: 32),
+              ...widget.teams.map((team) {
+                return Padding(
+                  padding: const EdgeInsets.all(50),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        team,
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.deepPurple[600],
+                        ),
+                      ),
+                      Text(
+                        "${teamScores[team]}",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple[800],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              }).toList(),
               isGameStarted
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
