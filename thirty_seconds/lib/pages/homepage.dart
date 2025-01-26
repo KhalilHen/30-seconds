@@ -8,7 +8,31 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+
+  late Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
+    scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(
+      parent: animationController,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,17 +54,27 @@ class _HomePageState extends State<HomePage> {
             //   height: 200,
             //   width: 200,
             // ),
-            ClipOval(
-              child: Image.asset(
-                // '/assets/logo.png',
-                // '/logo.png',
-                // 'logo.png', //This doesn't work
-                // 'assets/index.png',
-                // 'index.png', //* This works
-                'timer.jpg',
-                height: 200,
-                width: 200,
-                fit: BoxFit.cover,
+            AnimatedBuilder(
+              animation: scaleAnimation,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: scaleAnimation.value,
+                  child: child,
+                );
+              },
+              child: ClipOval(
+                //TODO Find a better fitting image later that fit's more the background and theme colors
+                child: Image.asset(
+                  // '/assets/logo.png',
+                  // '/logo.png',
+                  // 'logo.png', //This doesn't work
+                  // 'assets/index.png',
+                  // 'index.png', //* This works
+                  'timer.jpg',
+                  height: 200,
+                  width: 200,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             SizedBox(height: 40),
