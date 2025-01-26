@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart ';
+import 'package:audioplayers/audioplayers.dart';
 
 class GameScreen extends StatefulWidget {
   final List<String> teams;
@@ -22,7 +23,8 @@ class _GameScreenState extends State<GameScreen> {
   bool isGameStarted = false;
   String currentWordSet = '';
   Timer? countdownTimer;
-
+  final AudioPlayer audioPlayer = AudioPlayer();
+  double shakeOffSet = 0.0;
 
   @override
   void initState() {
@@ -98,12 +100,23 @@ class _GameScreenState extends State<GameScreen> {
         });
       } else {
         timer.cancel();
+        playSoundAndShake();
         showScoreDialog();
       }
     });
   }
 
- 
+  void playSoundAndShake() {
+    audioPlayer.play('assets/count-down.mp3', volume: 2);
+    setState(() {
+      shakeOffSet = 10;
+    });
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+        shakeOffSet = 0;
+      });
+    });
+  }
 
   Future<void> showScoreDialog() async {
     final currentTeam = widget.teams[currentTeamIndex];
@@ -167,6 +180,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void dispose() {
     countdownTimer?.cancel();
+    audioPlayer.dispose();
     super.dispose();
   }
 
@@ -180,54 +194,63 @@ class _GameScreenState extends State<GameScreen> {
         title: Text('Game Screen'),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Score',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 8),
-            Column(
-              children: widget.teams.map((team) {
-                return Text(
-                  '$team: ${teamScores[team]}',
-                  style: TextStyle(fontSize: 20),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 32),
-            isGameStarted
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Team: $currentTeam',
-                        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Player: $currentPlayer',
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Time Left: $timer',
-                        style: TextStyle(fontSize: 32.0, color: Colors.red),
-                      ),
-                      const SizedBox(height: 16.0),
-                      Text(
-                        'Words: $currentWordSet',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 20.0),
-                      ),
-                    ],
-                  )
-                : Text(
-                    'Get Ready $currentPlayer Starting in $timer...',
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  ),
-          ],
+        child: AnimatedBuilder(
+          animation: Listenable.merge([countdownTimer!, audioPlayer]),
+           builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(shakeOffSet, 0),
+              child: child,
+            );
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Score',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Column(
+                children: widget.teams.map((team) {
+                  return Text(
+                    '$team: ${teamScores[team]}',
+                    style: TextStyle(fontSize: 20),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 32),
+              isGameStarted
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Team: $currentTeam',
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Player: $currentPlayer',
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Time Left: $timer',
+                          style: TextStyle(fontSize: 32.0, color: Colors.red),
+                        ),
+                        const SizedBox(height: 16.0),
+                        Text(
+                          'Words: $currentWordSet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                      ],
+                    )
+                  : Text(
+                      'Get Ready $currentPlayer Starting in $timer...',
+                      style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                    ),
+            ],
+          ),
         ),
       ),
     );
