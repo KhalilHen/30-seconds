@@ -35,12 +35,18 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     words = generateRandomWords();
     startCountdown();
 
+    audioPlayer.setSource(AssetSource('count-down.mp3 '));
+
     shakeController = AnimationController(
       duration: const Duration(milliseconds: 100),
       vsync: this,
     );
 
     shakeAnimation = Tween<double>(begin: 0, end: 10).chain(CurveTween(curve: Curves.elasticIn)).animate(shakeController);
+  }
+
+  Future<void> playTimerEndSound() async {
+    await audioPlayer.play(AssetSource('count-down.mp3'));
   }
 
   List<String> generateRandomWords() {
@@ -119,6 +125,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
           }
         });
       } else {
+        playTimerEndSound();
+        shakeController.forward(from: 0);
         timer.cancel();
         showScoreDialog();
       }
@@ -199,6 +207,8 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
   @override
   void dispose() {
     countdownTimer?.cancel();
+    audioPlayer.dispose();
+
     audioPlayer.dispose();
     shakeController.dispose();
     super.dispose();
