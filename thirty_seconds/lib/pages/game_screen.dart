@@ -23,7 +23,8 @@ class _GameScreenState extends State<GameScreen> {
   bool isGameStarted = false;
   String currentWordSet = '';
   Timer? countdownTimer;
-  final AudioPlayer audioPlayer = AudioPlayer();
+  final AudioPlayer audioPlayer = AudioPlayer(); //* Not used
+
   double shakeOffSet = 0.0;
 
   @override
@@ -127,24 +128,36 @@ class _GameScreenState extends State<GameScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('$currentPlayer\'s Turn Over'),
+          title: Text(
+            '$currentPlayer\'s Turn Over',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.deepPurple[800], fontWeight: FontWeight.bold),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text('How many words did $currentPlayer guess correctly?'),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(6, (index) {
-                  return ElevatedButton(
-                    onPressed: () {
-                      guessedWords = index;
-                      Navigator.pop(context);
-                    },
-                    child: Text('$index'),
-                  );
-                }),
-              ),
+              Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  alignment: WrapAlignment.center,
+                  children: List.generate(6, (index) {
+                    return ElevatedButton(
+                        onPressed: () {
+                          guessedWords = index;
+                          Navigator.pop(context);
+                        },
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple[600], shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15))),
+                        child: Text(
+                          '$index',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ));
+                  }))
             ],
           ),
         );
