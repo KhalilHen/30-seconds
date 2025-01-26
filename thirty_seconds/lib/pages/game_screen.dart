@@ -23,6 +23,7 @@ class _GameScreenState extends State<GameScreen> {
   String currentWordSet = '';
   Timer? countdownTimer;
 
+
   @override
   void initState() {
     super.initState();
@@ -102,6 +103,8 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+ 
+
   Future<void> showScoreDialog() async {
     final currentTeam = widget.teams[currentTeamIndex];
     final currentPlayer = widget.players[currentTeam]![currentPlayerIndex];
@@ -123,7 +126,7 @@ class _GameScreenState extends State<GameScreen> {
                 children: List.generate(6, (index) {
                   return ElevatedButton(
                     onPressed: () {
-                      guessedWords = index; 
+                      guessedWords = index;
                       Navigator.pop(context);
                     },
                     child: Text('$index'),
@@ -177,36 +180,55 @@ class _GameScreenState extends State<GameScreen> {
         title: Text('Game Screen'),
       ),
       body: Center(
-        child: isGameStarted
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Team: $currentTeam',
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Score',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            Column(
+              children: widget.teams.map((team) {
+                return Text(
+                  '$team: ${teamScores[team]}',
+                  style: TextStyle(fontSize: 20),
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 32),
+            isGameStarted
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Team: $currentTeam',
+                        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Player: $currentPlayer',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Time Left: $timer',
+                        style: TextStyle(fontSize: 32.0, color: Colors.red),
+                      ),
+                      const SizedBox(height: 16.0),
+                      Text(
+                        'Words: $currentWordSet',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ],
+                  )
+                : Text(
+                    'Get Ready $currentPlayer Starting in $timer...',
                     style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    'Player: $currentPlayer',
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    'Time Left: $timer',
-                    style: TextStyle(fontSize: 32.0, color: Colors.red),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Text(
-                    'Words: $currentWordSet',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                ],
-              )
-            : Text(
-                'Get Ready $currentPlayer Starting in   $timer...',
-                style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-              ),
+          ],
+        ),
       ),
     );
   }
