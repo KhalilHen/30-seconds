@@ -27,7 +27,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
 
   late AnimationController shakeController;
   late Animation<double> shakeAnimation;
-
+  bool shouldShake = false;
   @override
   void initState() {
     super.initState();
@@ -36,7 +36,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
     startCountdown();
 
     shakeController = AnimationController(
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 100),
       vsync: this,
     );
 
@@ -86,6 +86,11 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
         setState(() {
           this.timer--;
         });
+
+        if (this.timer <= 3 && this.timer > 0) {
+          shouldShake = true;
+          shakeController.forward(from: 0);
+        }
       } else {
         timer.cancel();
         startGameRound();
@@ -99,14 +104,18 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
       timer = 30;
       words = generateRandomWords();
       currentWordSet = words.join(', ');
+      shouldShake = false;
     });
 
     countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (this.timer > 1) {
         setState(() {
           this.timer--;
-          if (this.timer == 3) {
+          if (this.timer <= 3 && this.timer > 0) {
+            shouldShake = true;
             shakeController.forward(from: 0);
+          } else {
+            shouldShake = false;
           }
         });
       } else {
@@ -214,7 +223,7 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
             animation: shakeAnimation,
             builder: (context, child) {
               return Transform.translate(
-                offset: Offset(shakeAnimation.value, 0),
+                offset: shouldShake ? Offset(shakeAnimation.value, 0) : Offset.zero,
                 child: child,
               );
             },
