@@ -324,35 +324,50 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                         children: [
                           Text(
                             'Team: $currentTeam',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple[900],
+                            ),
                           ),
-                          const SizedBox(height: 16.0),
+                          const SizedBox(height: 16),
                           Text(
                             'Player: $currentPlayer',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 20.0),
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.deepPurple[800],
+                            ),
                           ),
-                          const SizedBox(height: 16.0),
+                          const SizedBox(height: 16),
                           AnimatedDefaultTextStyle(
                             style: TextStyle(
-                              fontSize: 32.0,
-                              color: timer <= 5 ? Colors.red : Colors.black,
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: timer <= 5 ? Colors.red[800] : Colors.deepPurple[900],
                             ),
                             duration: const Duration(milliseconds: 500),
                             child: Text('Time Left: $timer'),
                           ),
-                          const SizedBox(height: 16.0),
+                          const SizedBox(height: 16),
                           Text(
                             'Words: $currentWordSet',
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 20.0),
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.deepPurple[700],
+                              fontStyle: FontStyle.italic,
+                            ),
                           ),
                         ],
                       )
                     : Text(
                         'Get Ready $currentPlayer Starting in $timer...',
-                        style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.deepPurple[900],
+                        ),
+                        textAlign: TextAlign.center,
                       ),
               ],
             ),
