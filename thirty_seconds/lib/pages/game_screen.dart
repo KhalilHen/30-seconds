@@ -202,8 +202,11 @@ class _GameScreenState extends State<GameScreen> {
     final currentPlayer = widget.players[currentTeam]![currentPlayerIndex];
 
     return Scaffold(
+      backgroundColor: Colors.deepPurple[50],
       appBar: AppBar(
-        title: Text('Game Screen'),
+        title: const Text('Game screen', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.deepPurple[600],
+        elevation: 0,
       ),
       body: Center(
         child: AnimatedBuilder(
