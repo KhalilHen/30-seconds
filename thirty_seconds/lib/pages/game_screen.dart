@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math';
-import 'package:flutter/material.dart ';
+import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 class GameScreen extends StatefulWidget {
@@ -34,7 +34,6 @@ class _GameScreenState extends State<GameScreen> {
     startCountdown();
   }
 
-//TODO Later change this into fetch api
   List<String> generateRandomWords() {
     final allWords = [
       'apple',
@@ -100,23 +99,23 @@ class _GameScreenState extends State<GameScreen> {
         });
       } else {
         timer.cancel();
-        playSoundAndShake();
+        // playSoundAndShake();
         showScoreDialog();
       }
     });
   }
 
-  void playSoundAndShake() {
-    audioPlayer.play('assets/count-down.mp3', volume: 2);
-    setState(() {
-      shakeOffSet = 10;
-    });
-    Future.delayed(Duration(milliseconds: 200), () {
-      setState(() {
-        shakeOffSet = 0;
-      });
-    });
-  }
+  // void playSoundAndShake() {
+  //   audioPlayer.play('assets/count-down.mp3' as Source, volume: 1.0);
+  //   setState(() {
+  //     shakeOffSet = 10;
+  //   });
+  //   Future.delayed(Duration(milliseconds: 200), () {
+  //     setState(() {
+  //       shakeOffSet = 0;
+  //     });
+  //   });
+  // }
 
   Future<void> showScoreDialog() async {
     final currentTeam = widget.teams[currentTeamIndex];
@@ -195,8 +194,8 @@ class _GameScreenState extends State<GameScreen> {
       ),
       body: Center(
         child: AnimatedBuilder(
-          animation: Listenable.merge([countdownTimer!, audioPlayer]),
-           builder: (context, child) {
+          animation: Listenable.merge([]), 
+          builder: (context, child) {
             return Transform.translate(
               offset: Offset(shakeOffSet, 0),
               child: child,
