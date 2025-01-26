@@ -215,25 +215,34 @@ class _GameScreenState extends State<GameScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(20), boxShadow: [
-                  BoxShadow(
-                    color: Colors.deepPurple.withOpacity(0.2),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  )
-                ]),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.deepPurple.withOpacity(0.2),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    )
+                  ],
+                ),
+                padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
                     Text(
                       "Scoreboard",
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.deepPurple[800]),
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.deepPurple[800],
+                      ),
                     ),
                     const SizedBox(height: 8),
                     ...widget.teams.map((team) {
                       return Padding(
-                        padding: const EdgeInsets.all(50),
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               team,
@@ -242,14 +251,21 @@ class _GameScreenState extends State<GameScreen> {
                                 color: Colors.deepPurple[600],
                               ),
                             ),
-                            Text(
-                              "${teamScores[team]}",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepPurple[800],
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                              decoration: BoxDecoration(
+                                color: Colors.deepPurple[100],
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            )
+                              child: Text(
+                                "team: ${teamScores[team]}",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.deepPurple[800],
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -257,6 +273,7 @@ class _GameScreenState extends State<GameScreen> {
                   ],
                 ),
               ),
+              Padding(padding: const EdgeInsets.all(16)),
               isGameStarted
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
