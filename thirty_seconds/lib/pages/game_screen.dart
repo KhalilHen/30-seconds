@@ -245,7 +245,7 @@ class _GameScreenState extends State<GameScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              team,
+                              " Team: ${team}",
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.deepPurple[600],
@@ -258,7 +258,7 @@ class _GameScreenState extends State<GameScreen> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                "team: ${teamScores[team]}",
+                                "Score::${teamScores[team]}",
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -273,24 +273,30 @@ class _GameScreenState extends State<GameScreen> {
                   ],
                 ),
               ),
-              Padding(padding: const EdgeInsets.all(16)),
+              Padding(padding: const EdgeInsets.symmetric(vertical: 16.0)),
               isGameStarted
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           'Team: $currentTeam',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16.0),
                         Text(
                           'Player: $currentPlayer',
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 20.0),
                         ),
                         const SizedBox(height: 16.0),
-                        Text(
-                          'Time Left: $timer',
-                          style: TextStyle(fontSize: 32.0, color: Colors.red),
+                        AnimatedDefaultTextStyle(
+                          style: TextStyle(
+                            fontSize: 32.0,
+                            color: timer <= 5 ? Colors.red : Colors.black,
+                          ),
+                          duration: const Duration(milliseconds: 500),
+                          child: Text('Time Left: $timer'),
                         ),
                         const SizedBox(height: 16.0),
                         Text(
