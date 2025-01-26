@@ -254,28 +254,33 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    gradient: LinearGradient(
+                      colors: [Colors.deepPurple[200]!, Colors.deepPurple[100]!],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.deepPurple.withOpacity(0.2),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
+                        color: Colors.black26,
+                        blurRadius: 15,
+                        offset: const Offset(0, 8),
                       )
                     ],
                   ),
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
                       Text(
                         "Scoreboard",
                         style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 26,
                           fontWeight: FontWeight.bold,
-                          color: Colors.deepPurple[800],
+                          color: Colors.deepPurple[900],
+                          letterSpacing: 1.1,
                         ),
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 12),
                       ...widget.teams.map((team) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -283,24 +288,25 @@ class _GameScreenState extends State<GameScreen> with SingleTickerProviderStateM
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                " Team: ${team}",
+                                "Team: $team",
                                 style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.deepPurple[600],
+                                  fontSize: 20,
+                                  color: Colors.deepPurple[800],
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                                 decoration: BoxDecoration(
-                                  color: Colors.deepPurple[100],
-                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.deepPurple[300],
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
                                 child: Text(
-                                  "Score::${teamScores[team]}",
+                                  "Score: ${teamScores[team]}",
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.deepPurple[800],
+                                    color: Colors.white,
                                   ),
                                 ),
                               ),
