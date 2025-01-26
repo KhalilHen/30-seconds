@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:thirty_seconds/pages/game_screen.dart';
 
 class StartGamePage extends StatelessWidget {
