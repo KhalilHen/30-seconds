@@ -32,6 +32,7 @@ class _SetupTeamsPageState extends State<SetupTeamsPage> {
         backgroundColor: Colors.red[400],
         duration: const Duration(seconds: 2),
       ));
+      return;
     }
     if (teamController.text.isNotEmpty) {
       setState(() {
