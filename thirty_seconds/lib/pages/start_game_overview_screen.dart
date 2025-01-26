@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:thirty_seconds/pages/game_screen.dart';
 
 class StartGamePage extends StatelessWidget {
   final Map<String, List<String>> players;
@@ -67,7 +68,14 @@ class StartGamePage extends StatelessWidget {
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => GameScreen(teams: teams, players: players),
+                      ),
+                    );
+                  },
                   child: Text(
                     'Start Game',
                     style: TextStyle(fontSize: 18),
