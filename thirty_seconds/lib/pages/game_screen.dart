@@ -14,6 +14,8 @@ class GameScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameScreen> {
   late List<String> words;
+  late Map<String, int> teamScores;
+
   int currentTeamIndex = 0;
   int currentPlayerIndex = 0;
   int timer = 30;
@@ -24,6 +26,7 @@ class _GameScreenState extends State<GameScreen> {
   @override
   void initState() {
     super.initState();
+    teamScores = {for (var team in widget.teams) team: 0};
     words = generateRandomWords();
     startCountdown();
   }
@@ -94,9 +97,47 @@ class _GameScreenState extends State<GameScreen> {
         });
       } else {
         timer.cancel();
-        nextPlayer();
+        showScoreDialog();
       }
     });
+  }
+
+  Future<void> showScoreDialog() async {
+    final currentTeam = widget.teams[currentTeamIndex];
+    final currentPlayer = widget.players[currentTeam]![currentPlayerIndex];
+
+    int guessedWords = 0;
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('$currentPlayer\'s Turn Over'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('How many words did $currentPlayer guess correctly?'),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(6, (index) {
+                  return ElevatedButton(
+                    onPressed: () {
+                      guessedWords = index; 
+                      Navigator.pop(context);
+                    },
+                    child: Text('$index'),
+                  );
+                }),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    updateScore(currentTeam, guessedWords);
+    nextPlayer();
   }
 
   void nextPlayer() {
@@ -112,6 +153,12 @@ class _GameScreenState extends State<GameScreen> {
       }
     });
     startCountdown();
+  }
+
+  void updateScore(String team, int guessedWords) {
+    setState(() {
+      teamScores[team] = (teamScores[team] ?? 0) + guessedWords;
+    });
   }
 
   @override
