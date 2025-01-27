@@ -6,6 +6,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMixin {
+  late AnimationController scaleAnimationController;
+  late Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    scaleAnimation = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(
+        reverse: true,
+      );
+    scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(parent: scaleAnimationController, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    scaleAnimationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,13 +48,22 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
               SizedBox(
                 height: 40,
               ),
-              CircleAvatar(
-                radius: 60,
-                backgroundColor: Colors.deepPurple[100],
-                child: Icon(
-                  Icons.person,
-                  size: 60,
-                  color: Colors.deepPurple[600],
+              AnimatedBuilder(
+                animation: scaleAnimation,
+                builder: (context, child) {
+                  return Transform.scale(
+                    scale: scaleAnimation.value,
+                    child: child,
+                  );
+                },
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundColor: Colors.deepPurple[100],
+                  child: Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Colors.deepPurple[600],
+                  ),
                 ),
               ),
               SizedBox(
@@ -100,7 +130,22 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       }
                       return null;
                     },
-                  )
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurple[600],
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        elevation: 5,
+                      ),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(fontSize: 16, color: Colors.deepPurple[600]),
+                      ))
                 ],
               ))
             ],
