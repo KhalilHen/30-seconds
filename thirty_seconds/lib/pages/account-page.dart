@@ -55,6 +55,21 @@ class AccountPage extends StatelessWidget {
                 child: Text(
                   "Login",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30), side: BorderSide(color: Colors.deepPurple[600]!, width: 2)),
+                    elevation: 5,
+                    minimumSize: Size(250, 55)),
+                child: Text(
+                  "Sign up",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple[600]),
                 ))
           ],
         ),
