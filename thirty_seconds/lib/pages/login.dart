@@ -12,7 +12,7 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    scaleAnimation = AnimationController(
+    scaleAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..repeat(
