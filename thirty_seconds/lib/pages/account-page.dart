@@ -67,8 +67,28 @@ class _AccountPageState extends State<AccountPage> with SingleTickerProviderStat
               height: 40,
             ),
             Text(
-              "Sign in ",
-              style: TextStyle(fontSize: 36, color: Colors.deepPurple[800], shadows: [Shadow(blurRadius: 10, color: Colors.deepPurple[200]!, offset: const Offset(3, 3))]),
+              "Login or sign up!",
+              style: TextStyle(
+                fontSize: 36,
+                color: Colors.deepPurple[800],
+                shadows: [
+                  Shadow(
+                    blurRadius: 10,
+                    color: Colors.deepPurple[200]!,
+                    offset: const Offset(3, 3),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              "To get access to all the features",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.deepPurple[600],
+              ),
             ),
             SizedBox(
               height: 40,
