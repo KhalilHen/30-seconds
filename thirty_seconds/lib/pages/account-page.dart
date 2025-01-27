@@ -6,24 +6,24 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> with SingleTickerProviderStateMixin {
-  late AnimationController animationController;
+  late AnimationController scaleAnimationController;
   late Animation<double> scaleAnimation;
 
   @override
   void initState() {
     super.initState();
-    animationController = AnimationController(
+    scaleAnimationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1000),
     )..repeat(
         reverse: true,
       );
-    scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
+    scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(parent: scaleAnimationController, curve: Curves.easeInOut));
   }
 
   @override
   void dispose() {
-    animationController.dispose();
+    scaleAnimationController.dispose();
     super.dispose();
   }
 
