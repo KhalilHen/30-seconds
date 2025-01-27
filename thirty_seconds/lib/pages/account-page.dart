@@ -146,7 +146,17 @@ class _AccountPageState extends State<AccountPage> with TickerProviderStateMixin
               ),
               ElevatedButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+                    Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                            pageBuilder: (context, animation, secondaryAnimation) => SignUpPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: child,
+                              );
+                            }));
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.white,

@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:thirty_seconds/pages/account-page.dart';
 import 'package:thirty_seconds/pages/login.dart';
 import 'package:thirty_seconds/pages/setup_teams.dart';
 import 'package:thirty_seconds/pages/sign_up.dart';
+// import 'dart:.io';
+import 'dart:io';
 
 class HomePage extends StatefulWidget {
   @override
@@ -125,18 +128,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
+
+            // ElevatedButton(
+            //     onPressed: () {
+            //       // SystemNavigator.pop(); //Doesn't work
+            //     },
+            //     style: ElevatedButton.styleFrom(
+            //         backgroundColor: Colors.deepPurple[600], padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+            //     child: Text(
+            //       "Exit",
+            //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+            //     ))
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-// Navigator.pu
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
-          // Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
-        },
-        backgroundColor: Colors.deepPurple[600],
-        child: Icon(Icons.add),
       ),
     );
   }
