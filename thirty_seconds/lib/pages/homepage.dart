@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:thirty_seconds/pages/account-page.dart';
 import 'package:thirty_seconds/pages/setup_teams.dart';
 
 class HomePage extends StatefulWidget {
@@ -114,6 +115,14 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
             ),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+// Navigator.pu
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
+        },
+        backgroundColor: Colors.deepPurple[600],
+        child: Icon(Icons.add),
       ),
     );
   }
