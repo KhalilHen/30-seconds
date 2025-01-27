@@ -45,6 +45,10 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                height: 20,
+              ),
+              /** For some breathing space */
               Text(
                 "Sign up",
                 style: TextStyle(
@@ -151,7 +155,7 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
                       ),
                       child: Text(
                         "Sign up",
-                        style: TextStyle(fontSize: 16, color: Colors.deepPurple[600]),
+                        style: TextStyle(fontSize: 16, color: Colors.white),
                       ))
                 ],
               ))

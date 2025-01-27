@@ -46,6 +46,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
+                height: 20,
+              ),
+              Text(
+                "Login",
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.deepPurple[600],
+                ),
+              ),
+              SizedBox(
                 height: 40,
               ),
               AnimatedBuilder(

@@ -47,6 +47,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
         backgroundColor: Colors.deepPurple[600],
         elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => AccountPage()));
+              },
+              icon: Icon(
+                Icons.account_circle_outlined,
+                color: Colors.white,
+              ))
+        ],
       ),
       body: Center(
         child: Column(
