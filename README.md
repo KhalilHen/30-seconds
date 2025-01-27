@@ -35,8 +35,7 @@ A multiplayer word guessing game built with Flutter, designed for group entertai
 5. Configure `pubspec.yaml`
 6. Launch with `flutter run`
 
-## Screenshots
-[Placeholder for game interface screenshots]
+
 
 ## Future Improvements
 
