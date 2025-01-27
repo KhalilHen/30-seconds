@@ -1,5 +1,5 @@
 
-# Word Guessing Game
+# Word Guessing Game | 30 Seconds
 
 ## Overview
 A multiplayer word guessing game built with Flutter, designed for group entertainment with dynamic team and player management.
