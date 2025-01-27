@@ -1,6 +1,32 @@
 import 'package:flutter/material.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
+  @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> with SingleTickerProviderStateMixin {
+  late AnimationController animationController;
+  late Animation<double> scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(
+        reverse: true,
+      );
+    scaleAnimation = Tween<double>(begin: 1.0, end: 1.1).animate(CurvedAnimation(parent: animationController, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,13 +45,22 @@ class AccountPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
-              radius: 60,
-              backgroundColor: Colors.deepPurple[100],
-              child: Icon(
-                Icons.person,
-                size: 60,
-                color: Colors.deepPurple,
+            AnimatedBuilder(
+              animation: scaleAnimation,
+              builder: (context, child) {
+                return Transform.scale(
+                  scale: scaleAnimation.value,
+                  child: child,
+                );
+              },
+              child: CircleAvatar(
+                radius: 60,
+                backgroundColor: Colors.deepPurple[100],
+                child: Icon(
+                  Icons.person,
+                  size: 60,
+                  color: Colors.deepPurple,
+                ),
               ),
             ),
             SizedBox(
