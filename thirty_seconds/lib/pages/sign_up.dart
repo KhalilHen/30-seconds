@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thirty_seconds/pages/homepage.dart';
 import 'package:thirty_seconds/pages/login.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -39,6 +40,17 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
         ),
         backgroundColor: Colors.deepPurple[600],
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+              );
+            },
+            icon: Icon(Icons.home),
+          )
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
