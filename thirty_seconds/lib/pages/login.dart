@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thirty_seconds/pages/sign_up.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -25,6 +26,18 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
   void dispose() {
     scaleAnimationController.dispose();
     super.dispose();
+  }
+
+  void _navigateToSignUpPage(BuildContext context) {
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => SignUpPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    ));
   }
 
   @override
@@ -155,7 +168,19 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
                       child: Text(
                         "Login",
                         style: TextStyle(fontSize: 16, color: Colors.white),
-                      ))
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      navigateToSignUpPage(context);
+                    },
+                    child: Text(
+                      "Don't have an account? Sign up",
+                      style: TextStyle(color: Colors.deepPurple[600]),
+                    ),
+                  ),
                 ],
               ))
             ],
@@ -164,4 +189,16 @@ class _LoginPageState extends State<LoginPage> with SingleTickerProviderStateMix
       ),
     );
   }
+}
+
+void navigateToSignUpPage(BuildContext context) {
+  Navigator.of(context).push(PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => SignUpPage(),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return FadeTransition(
+        opacity: animation,
+        child: child,
+      );
+    },
+  ));
 }

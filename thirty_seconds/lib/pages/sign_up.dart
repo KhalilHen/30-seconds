@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:thirty_seconds/pages/login.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -156,7 +157,19 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
                       child: Text(
                         "Sign up",
                         style: TextStyle(fontSize: 16, color: Colors.white),
-                      ))
+                      )),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      navigateToLoginPage(context);
+                    },
+                    child: Text(
+                      "Already have an account? Login",
+                      style: TextStyle(color: Colors.deepPurple[600]),
+                    ),
+                  ),
                 ],
               ))
             ],
@@ -164,5 +177,17 @@ class _SignUpPageState extends State<SignUpPage> with SingleTickerProviderStateM
         ),
       ),
     );
+  }
+
+  void navigateToLoginPage(BuildContext context) {
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => LoginPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    ));
   }
 }
