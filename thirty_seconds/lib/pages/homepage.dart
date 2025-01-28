@@ -3,11 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:thirty_seconds/pages/account-page.dart';
-import 'package:thirty_seconds/pages/login.dart';
 import 'package:thirty_seconds/pages/setup_teams.dart';
-import 'package:thirty_seconds/pages/sign_up.dart';
-// import 'dart:.io';
-import 'dart:io';
 
 class HomePage extends StatefulWidget {
   @override
@@ -65,11 +61,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Image.asset(
-            //   '/logo.png',
-            //   height: 200,
-            //   width: 200,
-            // ),
+       
             AnimatedBuilder(
               animation: scaleAnimation,
               builder: (context, child) {
